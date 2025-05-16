@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
                     //UserProfile(modifier = Modifier.padding(innerPadding))
                     //checkEmail(modifier = Modifier.padding(innerPadding))
                     //InputInfo()
-                    //UserInfoForm()
+                    UserInfoForm()
                 }
 
             }
