@@ -21,7 +21,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             BaiTapMobileTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    UserProfileScreen(modifier = Modifier.padding(innerPadding))
+                    //UserProfileScreen(modifier = Modifier.padding(innerPadding))
+                    //UserProfile(modifier = Modifier.padding(innerPadding))
+                    //checkEmail(modifier = Modifier.padding(innerPadding))
+                    //InputInfo()
+                    //UserInfoForm()
                 }
 
             }
