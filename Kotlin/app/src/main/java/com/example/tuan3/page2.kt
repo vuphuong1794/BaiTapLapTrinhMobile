@@ -40,21 +40,21 @@ fun page2(modifier: Modifier, navController: NavHostController) {
         Text(text = "Display", fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
         ComponentItem(title = "Text", description = "Displays text", onClick = {navController.navigate("page3")})
-        ComponentItem(title = "Image", description = "Displays an image", onClick = {})
+        ComponentItem(title = "Image", description = "Displays an image", onClick = {navController.navigate("page4")})
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(text = "Input", fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
-        ComponentItem(title = "TextField", description = "Input field for text",onClick = {} )
+        ComponentItem(title = "TextField", description = "Input field for text",onClick = {navController.navigate("page5")} )
         ComponentItem(title = "PasswordField", description = "Input field for passwords",onClick = {})
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(text = "Layout", fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
-        ComponentItem(title = "Column", description = "Arranges elements vertically",onClick = {})
-        ComponentItem(title = "Row", description = "Arranges elements horizontally",onClick = {})
+        ComponentItem(title = "Column", description = "Arranges elements vertically",onClick = {navController.navigate("page7")})
+        ComponentItem(title = "Row", description = "Arranges elements horizontally",onClick = {navController.navigate("page6")})
 
         Spacer(modifier = Modifier.height(24.dp))
         Button(onClick = { navController.popBackStack() }) {

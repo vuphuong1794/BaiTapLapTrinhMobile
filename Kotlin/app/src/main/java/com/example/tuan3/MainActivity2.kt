@@ -41,7 +41,19 @@ class MainActivity2 : ComponentActivity() {
                 page2(modifier = modifier, navController = navController)
             }
             composable("page3") {
-                TextDetailScreen()
+                TextDetailScreen(navController = navController)
+            }
+            composable("page4") {
+                ImagesPage(navController = navController)
+            }
+            composable("page5") {
+                textField(navController = navController)
+            }
+            composable("page6") {
+                RowLayoutPage(navController = navController)
+            }
+            composable("page7") {
+                ColumnLayoutPage(navController = navController)
             }
         }
     }
