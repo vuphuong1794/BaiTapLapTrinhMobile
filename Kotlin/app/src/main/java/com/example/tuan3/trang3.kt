@@ -3,6 +3,7 @@ package com.example.tuan3
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,45 +14,64 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import com.example.baitapmobile.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun page1(navController: NavHostController){
+fun trang3(navController: NavHostController){
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 8.dp),
         verticalArrangement = Arrangement.SpaceAround,
         horizontalAlignment = Alignment.CenterHorizontally) {
-        Image(
-            painter = rememberAsyncImagePainter("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjC97Z8BResg5dlPqczsRCFhP6zewWX0X0e7fVPG-G7PuUZwwZVsi9OPoqJYkgqT2h0FI95SsmWzVEgpt8b8HAqFiIxZ98TFtY4lE0b8UrtVJ2HrJebRwl6C9DslsQDl9KnBIrdHS6LtkY/s1600/jetpack+compose+icon_RGB.png"),
-            contentDescription = "Jetpack Compose",
-            modifier = Modifier
-                .size(300.dp)
-                .clip(CircleShape)
+
+        TopAppBar(
+            title = {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Detail",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF007AFF)
+                    )
+                }
+            },
+            navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color(0xFF007AFF)
+                    )
+                }
+            },
         )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Jetpack Compose",
-            fontSize = 30.sp,
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Bold
-
-        )
+        Spacer(Modifier.height(8.dp))
 
         Text(
             text = "Jetpack Compose is a modern UI toolkit for building native Android applications using a declarative programming approach.",
@@ -60,11 +80,21 @@ fun page1(navController: NavHostController){
         )
 
         Spacer(Modifier.height(8.dp))
-        Button(onClick = {navController.navigate("lazyCol")},
+
+        Image(
+            painter = painterResource(id = R.drawable.image),
+            contentDescription = "anh1",
+            modifier = Modifier
+                .size(400.dp)
+                .clip(RoundedCornerShape(16.dp)),
+        )
+
+        Spacer(Modifier.height(8.dp))
+        Button(onClick = {navController.navigate("page2")},
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text("PUSH")
+            Text("I'm ready")
         }
     }
 }

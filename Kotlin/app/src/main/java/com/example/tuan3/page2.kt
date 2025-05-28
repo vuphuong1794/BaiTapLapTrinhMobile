@@ -55,6 +55,7 @@ fun page2(modifier: Modifier, navController: NavHostController) {
         Spacer(modifier = Modifier.height(8.dp))
         ComponentItem(title = "Column", description = "Arranges elements vertically",onClick = {navController.navigate("page7")})
         ComponentItem(title = "Row", description = "Arranges elements horizontally",onClick = {navController.navigate("page6")})
+        ComponentItem(title = "lazyCol", description = "lazy column", onClick = {navController.navigate("lazyCol")})
 
         Spacer(modifier = Modifier.height(24.dp))
         Button(onClick = { navController.popBackStack() }) {
@@ -77,3 +78,5 @@ fun ComponentItem(title: String, description: String, onClick: () -> Unit) {
         Text(text = description)
     }
 }
+
+

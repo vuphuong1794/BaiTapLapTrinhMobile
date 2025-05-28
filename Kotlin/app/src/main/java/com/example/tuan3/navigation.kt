@@ -28,7 +28,7 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 
 @Composable
-fun page1(navController: NavHostController){
+fun navigation(navController: NavHostController){
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -37,7 +37,7 @@ fun page1(navController: NavHostController){
         horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
             painter = rememberAsyncImagePainter("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjC97Z8BResg5dlPqczsRCFhP6zewWX0X0e7fVPG-G7PuUZwwZVsi9OPoqJYkgqT2h0FI95SsmWzVEgpt8b8HAqFiIxZ98TFtY4lE0b8UrtVJ2HrJebRwl6C9DslsQDl9KnBIrdHS6LtkY/s1600/jetpack+compose+icon_RGB.png"),
-            contentDescription = "Jetpack Compose",
+            contentDescription = "Navigation",
             modifier = Modifier
                 .size(300.dp)
                 .clip(CircleShape)
@@ -46,7 +46,7 @@ fun page1(navController: NavHostController){
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Jetpack Compose",
+            text = "Navigation",
             fontSize = 30.sp,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold
@@ -64,7 +64,7 @@ fun page1(navController: NavHostController){
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text("PUSH")
+            Text("I'm ready")
         }
     }
 }

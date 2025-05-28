@@ -32,8 +32,11 @@ class MainActivity2 : ComponentActivity() {
         val navController = rememberNavController()
         NavHost(
             navController = navController,
-            startDestination = "page1"
+            startDestination = "navigation"
         ) {
+            composable("navigation") {
+                navigation(navController = navController)
+            }
             composable("page1") {
                 page1(navController = navController)
             }
@@ -54,6 +57,12 @@ class MainActivity2 : ComponentActivity() {
             }
             composable("page7") {
                 ColumnLayoutPage(navController = navController)
+            }
+            composable("lazyCol") {
+                lazyColumnPage(navController = navController)
+            }
+            composable("trang3") {
+                trang3(navController = navController)
             }
         }
     }
