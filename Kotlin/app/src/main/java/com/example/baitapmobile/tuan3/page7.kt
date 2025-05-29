@@ -1,22 +1,20 @@
-package com.example.tuan3
+package com.example.baitapmobile.tuan3
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material3.Button
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,7 +23,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -34,8 +31,12 @@ import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun lazyColumnPage(navController: NavHostController){
-    Column {
+fun ColumnLayoutPage(navController: NavHostController){
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF5F5F5))
+    ) {
         TopAppBar(
             title = {
                 Box(
@@ -43,7 +44,7 @@ fun lazyColumnPage(navController: NavHostController){
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Lazy Column",
+                        text = "Column Layout",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color(0xFF007AFF)
@@ -60,41 +61,41 @@ fun lazyColumnPage(navController: NavHostController){
                 }
             }
         )
-        LazyColumn {
-            items(100){
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(20.dp)
+        ) {
+            repeat(3) { rowIndex ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color(0xFFB3E5FC)) // Light blue background
-                        .padding(12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .padding(bottom = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Text(
-                        text = "The only way to do great work is to love what you do.",
-                        fontSize = 16.sp,
-                        color = Color.Black,
-                        modifier = Modifier.weight(1f)
-                    )
-
                     Box(
                         modifier = Modifier
-                            .size(36.dp)
-                            .clip(RoundedCornerShape(6.dp))
-                            .background(Color.Black)
-                            .clickable {navController.navigate("trang3")},
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.KeyboardArrowRight,
-                            contentDescription = "Next",
-                            tint = Color.White
-                        )
-                    }
+                            .weight(1f)
+                            .height(80.dp)
+                            .background(
+                                color = getBoxColor(rowIndex),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                    )
                 }
-
-                Spacer(modifier = Modifier.padding(8.dp))
             }
+
+            Spacer(modifier = Modifier.height(100.dp))
         }
+    }
+}
+
+@Composable
+private fun getBoxColor(rowIndex: Int): Color {
+    return when {
+        rowIndex == 1 -> Color.Yellow
+        else -> Color.Green
     }
 }

@@ -1,4 +1,4 @@
-package com.example.baitapmobile
+package com.example.baitapmobile.tuan1
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,11 +30,41 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 
 @Composable
-//THUC HANH 1
-fun UserProfile(
+// BAI TAP 1
+fun UserProfileScreen(
     modifier: Modifier
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
+        IconButton(
+            onClick = {},
+            modifier = Modifier
+                .padding(16.dp)
+                .size(56.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
+                .align(Alignment.TopStart)
+        ) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = "Back"
+            )
+        }
+
+        IconButton(
+            onClick = {},
+            modifier = Modifier
+                .padding(16.dp)
+                .size(56.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
+                .align(Alignment.TopEnd)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Edit,
+                contentDescription = "Edit"
+            )
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -53,14 +83,14 @@ fun UserProfile(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Vũ Nguyễn Phương - CN22H",
+                text = "Vũ Nguyễn Phương",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold
             )
 
             Spacer(Modifier.padding(8.dp))
             Text(
-                text = "Học thêm kiến thức mới, tìm hiểu nhiều công nghệ để nâng cao kỹ năng cá nhân cũng như cơ hội thăng tiến trong công việc.",
+                text = "Bà Rịa Vũng Tàu",
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.Gray
             )

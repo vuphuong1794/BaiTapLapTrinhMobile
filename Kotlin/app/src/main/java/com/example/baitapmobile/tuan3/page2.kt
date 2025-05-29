@@ -1,4 +1,4 @@
-package com.example.tuan3
+package com.example.baitapmobile.tuan3
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,7 +16,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun page2(modifier: Modifier, navController: NavHostController) {

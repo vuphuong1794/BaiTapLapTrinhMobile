@@ -14,17 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BaiTapMobile"
         tools:targetApi="31">
-        <activity
-            android:name="com.example.tuan3.MainActivity2"
-            android:exported="true"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/Theme.BaiTapMobile" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
         <activity
             android:name=".MainActivity"

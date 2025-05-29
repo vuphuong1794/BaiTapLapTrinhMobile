@@ -1,4 +1,4 @@
-package com.example.baitapmobile
+package com.example.baitapmobile.tuan2
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
