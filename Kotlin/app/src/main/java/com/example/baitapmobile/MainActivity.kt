@@ -20,6 +20,7 @@ import com.example.baitapmobile.tuan3.page1
 import com.example.baitapmobile.tuan3.page2
 import com.example.baitapmobile.tuan3.textField
 import com.example.baitapmobile.tuan4.detailPage
+import com.example.baitapmobile.tuan4.homework.baitap1.qlyThuVien
 import com.example.baitapmobile.tuan4.homework.thuchanh2.OnBoardScreen
 import com.example.baitapmobile.tuan4.homework.thuchanh2.startScreen
 import com.example.baitapmobile.ui.theme.BaiTapMobileTheme
@@ -50,7 +51,7 @@ class MainActivity : ComponentActivity() {
         val navController = rememberNavController()
         NavHost(
             navController = navController,
-            startDestination = "startScreen"
+            startDestination = "qlyThuVien"
         ) {
             composable("navigation") {
                 navigation(navController = navController)
@@ -87,6 +88,9 @@ class MainActivity : ComponentActivity() {
             }
             composable("getStartedFirst") {
                 OnBoardScreen(navController = navController)
+            }
+            composable("qlyThuVien") {
+                qlyThuVien(navController = navController)
             }
         }
     }
