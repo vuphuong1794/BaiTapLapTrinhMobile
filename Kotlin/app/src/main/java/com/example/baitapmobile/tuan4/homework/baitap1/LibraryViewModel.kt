@@ -1,72 +1,62 @@
 package com.example.baitapmobile.tuan4.homework.baitap1
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.State
 
 class LibraryViewModel : ViewModel() {
-    private val library = Library(
-        listOf(
-            Book(1, "Dế Mèn Phiêu Lưu Ký", "Tô Hoài"),
-            Book(2, "Tuổi Thơ Dữ Dội", "Phùng Quán"),
-            Book(3, "Harry Potter", "J.K. Rowling"),
-            Book(4, "Đắc Nhân Tâm", "Dale Carnegie")
-        )
+    private val books = listOf(
+        Book(1, "Sách A", "Tác giả A"),
+        Book(2, "Sách B", "Tác giả B"),
+        Book(3, "Sách C", "Tác giả C"),
+        Book(4, "Sách D", "Tác giả D")
     )
 
-    private var _student by mutableStateOf<Student?>(null)
-    private var _showAvailableBooks by mutableStateOf(false)
+    private val library = Library(books)
+    private val _currentStudent = mutableStateOf<Student?>(null)
+    val showAvailable = mutableStateOf(false)
+    private val _borrowStateTrigger = mutableStateOf(0) // Thêm trigger để refresh UI
 
-    private val _availableBooks = mutableStateListOf<Book>()
-    private val _borrowedBooks = mutableStateListOf<Book>()
-
-    init {
-        _availableBooks.addAll(library.getAvailableBooks())
-    }
+    val currentStudent: State<Student?> get() = _currentStudent
 
     fun updateStudent(name: String) {
-        // Nếu student mới khác tên thì tạo mới, không thì giữ nguyên để không mất sách mượn
-        if (_student == null || _student?.name != name) {
-            _student = Student(name)
-        }
-        _showAvailableBooks = false
-        refreshAvailableBooks()
-        refreshBorrowedBooks()
-    }
-
-    // Trả ra State để Compose theo dõi
-    fun borrowedBooks(): List<Book> = _borrowedBooks
-
-    fun getAvailableBooks(): List<Book> = _availableBooks
-
-    fun toggleBorrow(book: Book) {
-        _student?.let {
-            if (it.hasBorrowed(book.id)) {
-                library.returnBook(book.id, it)
-            } else {
-                library.borrowBook(book.id, it)
-            }
-            refreshAvailableBooks()
-            refreshBorrowedBooks()
-        }
-    }
-
-    private fun refreshAvailableBooks() {
-        _availableBooks.clear()
-        _availableBooks.addAll(library.getAvailableBooks())
-    }
-
-    private fun refreshBorrowedBooks() {
-        _borrowedBooks.clear()
-        _student?.let {
-            _borrowedBooks.addAll(library.getBorrowedBooksBy(it))
+        if (name.isNotBlank()) {
+            _currentStudent.value = Student(name.trim())
+        } else {
+            _currentStudent.value = null
         }
     }
 
     fun toggleShowAvailable() {
-        _showAvailableBooks = !_showAvailableBooks
+        showAvailable.value = !showAvailable.value
     }
 
-    fun isShowingAvailable(): Boolean = _showAvailableBooks
+    fun isShowingAvailable(): Boolean = showAvailable.value
+
+    fun getDisplayBooks(): List<Book> {
+        val student = _currentStudent.value ?: return emptyList()
+        _borrowStateTrigger.value // Đọc để trigger re-compose
+        return if (showAvailable.value) {
+            library.getAvailableBooks()
+        } else {
+            library.getBorrowedBooksBy(student)
+        }
+    }
+
+    fun toggleBorrow(book: Book) {
+        val student = _currentStudent.value ?: return
+        val isCurrentlyBorrowed = library.getBorrowedBooksBy(student).any { it.id == book.id }
+        if (isCurrentlyBorrowed) {
+            library.returnBook(book.id, student)
+        } else {
+            library.borrowBook(book.id, student)
+        }
+        _borrowStateTrigger.value++ // Trigger re-compose sau khi thay đổi trạng thái
+    }
+
+    fun isBookBorrowed(book: Book): Boolean {
+        val student = _currentStudent.value ?: return false
+        _borrowStateTrigger.value // Đọc để trigger re-compose
+        return library.getBorrowedBooksBy(student).any { it.id == book.id }
+    }
 }

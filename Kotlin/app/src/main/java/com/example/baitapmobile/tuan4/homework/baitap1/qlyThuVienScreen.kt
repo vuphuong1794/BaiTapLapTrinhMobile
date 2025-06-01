@@ -1,4 +1,3 @@
-// qlyThuVien.kt
 package com.example.baitapmobile.tuan4.homework.baitap1
 
 import androidx.compose.foundation.layout.*
@@ -17,16 +16,24 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 
 @Composable
-fun BookItem(book: Book, isSelected: Boolean, onCheckedChange: () -> Unit) {
-    Card(Modifier
-        .fillMaxWidth()
-        .padding(vertical = 4.dp)) {
+fun BookItem(book: Book, isSelected: Boolean, onCheckedChange: (Boolean) -> Unit) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)
+    ) {
         Row(
-            Modifier.padding(12.dp),
+            modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(book.title, Modifier.weight(1f))
-            Checkbox(checked = isSelected, onCheckedChange = { onCheckedChange() })
+            Column(modifier = Modifier.weight(1f)) {
+                Text(book.title, fontWeight = FontWeight.Medium)
+                Text(book.author, fontSize = 14.sp, color = Color.Gray)
+            }
+            Checkbox(
+                checked = isSelected,
+                onCheckedChange = onCheckedChange
+            )
         }
     }
 }
@@ -41,25 +48,25 @@ fun qlyThuVien(navController: NavHostController, viewModel: LibraryViewModel = v
             .padding(16.dp)
     ) {
         Text(
-            text = "Hệ thống \n Quản lý Thư viện",
+            text = "Hệ thống\nQuản lý Thư viện",
             textAlign = TextAlign.Center,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         // Nhập tên sinh viên
         Card(
             modifier = Modifier.fillMaxWidth(),
-            elevation = CardDefaults.cardElevation(4.dp)
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
         ) {
-            Column(Modifier.padding(16.dp)) {
+            Column(modifier = Modifier.padding(16.dp)) {
                 Text("Sinh viên", fontWeight = FontWeight.Medium)
 
                 Row(
-                    Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -71,6 +78,7 @@ fun qlyThuVien(navController: NavHostController, viewModel: LibraryViewModel = v
                     )
                     Button(onClick = {
                         viewModel.updateStudent(inputName)
+                        inputName = ""
                     }) {
                         Text("Thay đổi")
                     }
@@ -78,79 +86,74 @@ fun qlyThuVien(navController: NavHostController, viewModel: LibraryViewModel = v
             }
         }
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-        // Danh sách sách đã mượn
+        // Danh sách sách
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-            elevation = CardDefaults.cardElevation(4.dp)
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
         ) {
-            Column(Modifier.padding(16.dp)) {
-                Text("Sách đã mượn", fontWeight = FontWeight.Medium)
+            Column(modifier = Modifier.padding(16.dp)) {
+                val isShowingAvailable = viewModel.isShowingAvailable()
+                Text(
+                    text = if (isShowingAvailable) "Sách khả dụng để mượn" else "Sách đã mượn",
+                    fontWeight = FontWeight.Medium
+                )
 
-                val borrowed = viewModel.borrowedBooks()
-                if (borrowed.isEmpty()) {
+                Spacer(modifier = Modifier.height(8.dp))
+
+                val currentStudent by viewModel.currentStudent
+                val displayBooks by remember { derivedStateOf { viewModel.getDisplayBooks() } }
+
+                if (displayBooks.isEmpty()) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("Bạn chưa mượn quyển sách nào", color = Color.Gray)
-                            Text("Nhấn 'Thêm' để bắt đầu hành trình đọc sách!", color = Color.Gray)
-                        }
+                        Text(
+                            text = when {
+                                currentStudent == null -> "Vui lòng nhập tên sinh viên."
+                                isShowingAvailable -> "Không có sách nào khả dụng để mượn."
+                                else -> "Sinh viên chưa mượn sách nào."
+                            },
+                            color = Color.Gray
+                        )
                     }
                 } else {
                     LazyColumn {
-                        items(borrowed) { book ->
-                            BookItem(book, true) {
-                                viewModel.toggleBorrow(book)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        Spacer(Modifier.height(16.dp))
-
-        // Danh sách sách có thể mượn
-        if (viewModel.isShowingAvailable()) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                elevation = CardDefaults.cardElevation(4.dp)
-            ) {
-                Column(Modifier.padding(16.dp)) {
-                    Text("Chọn sách để mượn", fontWeight = FontWeight.Medium)
-                    val available = viewModel.getAvailableBooks()
-                    if (available.isEmpty()) {
-                        Text("Không còn sách khả dụng.", color = Color.Gray)
-                    } else {
-                        LazyColumn {
-                            items(available) { book ->
-                                BookItem(book, false) {
+                        items(displayBooks) { book ->
+                            val isBorrowed by remember(book.id) { derivedStateOf { viewModel.isBookBorrowed(book) } }
+                            BookItem(
+                                book = book,
+                                isSelected = isBorrowed,
+                                onCheckedChange = { _ ->
                                     viewModel.toggleBorrow(book)
                                 }
-                            }
+                            )
                         }
                     }
                 }
             }
-
-            Spacer(Modifier.height(16.dp))
         }
 
-        // Nút Thêm / Ẩn
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Nút chuyển đổi chế độ
         Button(
             onClick = { viewModel.toggleShowAvailable() },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            enabled = viewModel.currentStudent.value != null
         ) {
-            Text(if (viewModel.isShowingAvailable()) "Ẩn danh sách" else "Thêm")
+            Text(
+                text = if (viewModel.isShowingAvailable())
+                    "Xem sách đã mượn"
+                else
+                    "Xem sách khả dụng"
+            )
         }
     }
 }
