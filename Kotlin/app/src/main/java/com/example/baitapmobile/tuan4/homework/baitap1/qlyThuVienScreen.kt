@@ -1,7 +1,6 @@
 package com.example.baitapmobile.tuan4.homework.baitap1
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -9,7 +8,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -30,7 +28,7 @@ fun BookItem(book: Book, isSelected: Boolean, onCheckedChange: (Boolean) -> Unit
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFEDE7F6)), // Light purple background
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFEDE7F6)),
         shape = RoundedCornerShape(8.dp)
     ) {
         Row(
@@ -44,14 +42,14 @@ fun BookItem(book: Book, isSelected: Boolean, onCheckedChange: (Boolean) -> Unit
             Checkbox(
                 checked = isSelected,
                 onCheckedChange = onCheckedChange,
-                colors = CheckboxDefaults.colors(checkedColor = Color(0xFFB71C1C)) // Red checkbox
+                colors = CheckboxDefaults.colors(checkedColor = Color(0xFFB71C1C))
             )
         }
     }
 }
 
 @Composable
-fun qlyThuVien(navController: NavHostController, viewModel: LibraryViewModel = viewModel()) {
+fun ManagementTab(viewModel: LibraryViewModel) {
     var inputName by remember { mutableStateOf("") }
 
     Column(
@@ -59,20 +57,9 @@ fun qlyThuVien(navController: NavHostController, viewModel: LibraryViewModel = v
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(
-            text = "Hệ thống\nQuản lý Thư viện",
-            textAlign = TextAlign.Center,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        // Nhập tên sinh viên
         Card(
             modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFEDE7F6)), // Light purple background
+            colors = CardDefaults.cardColors(containerColor = Color(0xFFEDE7F6)),
             shape = RoundedCornerShape(12.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
@@ -90,7 +77,7 @@ fun qlyThuVien(navController: NavHostController, viewModel: LibraryViewModel = v
                         placeholder = { Text("Nhập tên sinh viên") },
                         modifier = Modifier.weight(1f),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Color(0xFF7E57C2), // Purple border
+                            focusedBorderColor = Color(0xFF7E57C2),
                             unfocusedBorderColor = Color(0xFF7E57C2)
                         )
                     )
@@ -99,7 +86,7 @@ fun qlyThuVien(navController: NavHostController, viewModel: LibraryViewModel = v
                             viewModel.updateStudent(inputName)
                             inputName = ""
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7E57C2)), // Purple button
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7E57C2)),
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Text("Thay đổi", color = Color.White)
@@ -110,12 +97,11 @@ fun qlyThuVien(navController: NavHostController, viewModel: LibraryViewModel = v
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Danh sách sách
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)), // Light gray background
+            colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
             shape = RoundedCornerShape(12.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
@@ -167,88 +153,185 @@ fun qlyThuVien(navController: NavHostController, viewModel: LibraryViewModel = v
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Nút chuyển đổi chế độ
         Button(
             onClick = { viewModel.toggleShowAvailable() },
             modifier = Modifier.fillMaxWidth(),
             enabled = viewModel.currentStudent.value != null,
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7E57C2)), // Purple button
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7E57C2)),
             shape = RoundedCornerShape(12.dp)
         ) {
             Text(
-                text = if (viewModel.isShowingAvailable())
-                    "Xem sách đã mượn"
-                else
-                    "Thêm",
+                text = if (viewModel.isShowingAvailable()) "Xem sách đã mượn" else "Thêm",
                 color = Color.White
             )
         }
-        Spacer(modifier = Modifier.height(16.dp))
+    }
+}
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.SpaceAround
+@Composable
+fun BookListTab(viewModel: LibraryViewModel) {
+    var bookTitle by remember { mutableStateOf("") }
+    var bookAuthor by remember { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFFEDE7F6)),
+            shape = RoundedCornerShape(12.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(
-                    modifier = Modifier
-                        .size(36.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(Color.Black),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Home,
-                        contentDescription = "home",
-                        tint = Color.White
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text("Tạo sách mới", fontWeight = FontWeight.Medium)
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                OutlinedTextField(
+                    value = bookTitle,
+                    onValueChange = { bookTitle = it },
+                    placeholder = { Text("Nhập tiêu đề sách") },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color(0xFF7E57C2),
+                        unfocusedBorderColor = Color(0xFF7E57C2)
                     )
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                OutlinedTextField(
+                    value = bookAuthor,
+                    onValueChange = { bookAuthor = it },
+                    placeholder = { Text("Nhập tên tác giả") },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color(0xFF7E57C2),
+                        unfocusedBorderColor = Color(0xFF7E57C2)
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = {
+
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7E57C2)),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text("Thêm sách", color = Color.White)
                 }
-                Text(
-                    text = "Quản lý",
-                    fontSize = 12.sp
+            }
+        }
+    }
+}
+
+@Composable
+fun StudentTab(viewModel: LibraryViewModel) {
+    var studentName by remember { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFFEDE7F6)),
+            shape = RoundedCornerShape(12.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text("Tạo sinh viên mới", fontWeight = FontWeight.Medium)
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                OutlinedTextField(
+                    value = studentName,
+                    onValueChange = { studentName = it },
+                    placeholder = { Text("Nhập tên sinh viên") },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color(0xFF7E57C2),
+                        unfocusedBorderColor = Color(0xFF7E57C2)
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = {
+                        if (studentName.isNotBlank()) {
+                            viewModel.updateStudent(studentName)
+                            studentName = ""
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7E57C2)),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text("Thêm sinh viên", color = Color.White)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun qlyThuVien(navController: NavHostController, viewModel: LibraryViewModel = viewModel()) {
+    var selectedTab by remember { mutableStateOf(0) }
+
+    Scaffold(
+        bottomBar = {
+            TabRow(
+                selectedTabIndex = selectedTab,
+                containerColor = Color.White,
+                contentColor = Color.Black
+            ) {
+                Tab(
+                    selected = selectedTab == 0,
+                    onClick = { selectedTab = 0 },
+                    icon = { Icon(Icons.Default.Home, contentDescription = "Quản lý") },
+                    text = { Text("Quản lý") }
+                )
+                Tab(
+                    selected = selectedTab == 1,
+                    onClick = { selectedTab = 1 },
+                    icon = { Icon(Icons.Default.List, contentDescription = "DS Sách") },
+                    text = { Text("DS Sách") }
+                )
+                Tab(
+                    selected = selectedTab == 2,
+                    onClick = { selectedTab = 2 },
+                    icon = { Icon(Icons.Default.AccountCircle, contentDescription = "Sinh viên") },
+                    text = { Text("Sinh viên") }
                 )
             }
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
+            Text(
+                text = "Hệ thống\nQuản lý Thư viện",
+                textAlign = TextAlign.Center,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
 
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(
-                    modifier = Modifier
-                        .size(36.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(Color.Black),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.List,
-                        contentDescription = "list",
-                        tint = Color.White
-                    )
-                }
-                Text(
-                    text = "DS Sách",
-                    fontSize = 12.sp
-                )
-            }
-
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(
-                    modifier = Modifier
-                        .size(36.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(Color.Black),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.AccountCircle,
-                        contentDescription = "user",
-                        tint = Color.White
-                    )
-                }
-                Text(
-                    text = "Sinh viên",
-                    fontSize = 12.sp
-                )
+            when (selectedTab) {
+                0 -> ManagementTab(viewModel)
+                1 -> BookListTab(viewModel)
+                2 -> StudentTab(viewModel)
             }
         }
     }
