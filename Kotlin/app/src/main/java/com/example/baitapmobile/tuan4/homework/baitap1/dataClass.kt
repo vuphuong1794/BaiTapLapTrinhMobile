@@ -18,10 +18,55 @@ class Student(override val name: String) : User(name) {
     override fun hashCode(): Int = name.hashCode()
 }
 
-class Library(private val allBooks: List<Book>) {
+class Library(initialBooks: List<Book> = emptyList()) {
+    private val _allBooks = initialBooks.toMutableList()
+
     private val borrowedMap = mutableMapOf<Int, Student>()
 
+    fun addBook(bookId: Int, title: String, author: String): Boolean {
+        // Kiểm tra xem ID đã tồn tại chưa
+        if (_allBooks.any { it.id == bookId }) {
+            return false // ID đã tồn tại
+        }
+
+        val newBook = Book(bookId, title, author)
+        _allBooks.add(newBook)
+        return true
+    }
+
+    fun addBook(book: Book): Boolean {
+        // Overload method để thêm Book object
+        if (_allBooks.any { it.id == book.id }) {
+            return false // ID đã tồn tại
+        }
+
+        _allBooks.add(book)
+        return true
+    }
+
+    fun removeBook(bookId: Int): Boolean {
+        // Không thể xóa sách đang được mượn
+        if (borrowedMap.containsKey(bookId)) {
+            return false
+        }
+
+        return _allBooks.removeIf { it.id == bookId }
+    }
+
+    fun getBookById(bookId: Int): Book? {
+        return _allBooks.find { it.id == bookId }
+    }
+
+    fun getAllBooks(): List<Book> {
+        return _allBooks.toList()
+    }
+
     fun borrowBook(bookId: Int, student: Student): Boolean {
+        // Kiểm tra sách có tồn tại không
+        if (!_allBooks.any { it.id == bookId }) {
+            return false
+        }
+
         if (!borrowedMap.containsKey(bookId)) {
             borrowedMap[bookId] = student
             return true
@@ -38,10 +83,10 @@ class Library(private val allBooks: List<Book>) {
     }
 
     fun getAvailableBooks(): List<Book> {
-        return allBooks.filter { !borrowedMap.containsKey(it.id) }
+        return _allBooks.filter { !borrowedMap.containsKey(it.id) }
     }
 
     fun getBorrowedBooksBy(student: Student): List<Book> {
-        return allBooks.filter { borrowedMap[it.id] == student }
+        return _allBooks.filter { borrowedMap[it.id] == student }
     }
 }
