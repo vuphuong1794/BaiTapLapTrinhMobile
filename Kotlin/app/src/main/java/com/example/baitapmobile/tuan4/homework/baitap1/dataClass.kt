@@ -34,16 +34,6 @@ class Library(initialBooks: List<Book> = emptyList()) {
         return true
     }
 
-    fun addBook(book: Book): Boolean {
-        // Overload method để thêm Book object
-        if (_allBooks.any { it.id == book.id }) {
-            return false // ID đã tồn tại
-        }
-
-        _allBooks.add(book)
-        return true
-    }
-
     fun removeBook(bookId: Int): Boolean {
         // Không thể xóa sách đang được mượn
         if (borrowedMap.containsKey(bookId)) {
@@ -51,10 +41,6 @@ class Library(initialBooks: List<Book> = emptyList()) {
         }
 
         return _allBooks.removeIf { it.id == bookId }
-    }
-
-    fun getBookById(bookId: Int): Book? {
-        return _allBooks.find { it.id == bookId }
     }
 
     fun getAllBooks(): List<Book> {

@@ -86,14 +86,6 @@ class LibraryViewModel : ViewModel() {
         return success
     }
 
-    fun addBook(book: Book): Boolean {
-        val success = library.addBook(book)
-        if (success) {
-            _bookListTrigger.value++
-        }
-        return success
-    }
-
     // Phương thức xóa sách
     fun removeBook(bookId: Int): Boolean {
         val success = library.removeBook(bookId)
@@ -102,9 +94,5 @@ class LibraryViewModel : ViewModel() {
             _borrowStateTrigger.value++ // Cũng cần update borrow state
         }
         return success
-    }
-
-    fun getBookById(bookId: Int): Book? {
-        return library.getBookById(bookId)
     }
 }
