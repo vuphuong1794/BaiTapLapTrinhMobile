@@ -6,17 +6,9 @@ data class Book(
     val author: String
 )
 
-open class User(open val name: String)
+open class User(open val name: String) //lớp cơ sở
 
-class Student(override val name: String) : User(name) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is Student) return false
-        return name == other.name
-    }
-
-    override fun hashCode(): Int = name.hashCode()
-}
+class Student(override val name: String) : User(name) {} //kế thừa từ user
 
 class Library(initialBooks: List<Book> = emptyList()) {
     private val _allBooks = initialBooks.toMutableList()

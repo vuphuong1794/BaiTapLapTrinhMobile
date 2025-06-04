@@ -18,7 +18,6 @@ import androidx.navigation.NavHostController
 import com.example.baitapmobile.R
 import kotlinx.coroutines.launch
 
-
 val sampleData = listOf(
     pageItemModel(
         title = "Easy Time Management",

@@ -1,6 +1,5 @@
 package com.example.baitapmobile.tuan4.homework.baitap2
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +31,8 @@ import com.example.baitapmobile.R
 @Composable
 fun DataFlowNavigation(email2: String?, pass: String?, navHostController: NavHostController){
     var email by remember { mutableStateOf("") }
+    var isEmailError by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -54,31 +56,45 @@ fun DataFlowNavigation(email2: String?, pass: String?, navHostController: NavHos
             color = Color.Black
         )
         Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            "Enter your Email, we will send you a verification code.",
-            textAlign = TextAlign.Center,
-            fontSize = 15.sp,
-            color = Color.Black
-        )
-        Spacer(modifier = Modifier.height(20.dp))
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
-            value = email,
-            onValueChange = {email=it},
-            label = {
-                Text("Email")
-            }
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        Button(
-            onClick = { navHostController.navigate("navDataFlow2/$email") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
-            colors = androidx.compose.material3.ButtonDefaults.buttonColors(Color(0xFF2196F3))
+            value = email,
+            onValueChange = {
+                email = it
+                isEmailError = !(email.contains("@gmail.com")) // Kiểm tra email hợp lệ
+            },
+            label = {
+                Text("Email")
+            },
+            isError = isEmailError
+        )
+        if (isEmailError) {
+            Text(
+                text = "Email không hợp lệ. Vui lòng nhập đúng định dạng @gmail.com",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(horizontal = 20.dp)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+        Button(
+            onClick = {
+                isEmailError = !(email.contains("@gmail.com"))
+                if (!isEmailError) {
+                    navHostController.navigate("navDataFlow2/$email")
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            colors = ButtonDefaults.buttonColors(Color(0xFF2196F3))
         ) {
             Text("Next")
         }
+
 
         Column(
             modifier = Modifier.padding(20.dp),
@@ -101,80 +117,83 @@ fun DataFlowNavigation(email2: String?, pass: String?, navHostController: NavHos
 }
 
 @Composable
-fun DataFlowNavigation2(email:String,navController: NavHostController) {
-    if (email != "maikhoa@gmail.com"){
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text("Email không đúng")
-            Button(
-                onClick = {
-                    navController.popBackStack()
-                }
-            ) {
-                Text("Quay lại")
-            }
+fun DataFlowNavigation2(email: String, navController: NavHostController) {
+    var isOtpError by remember { mutableStateOf(false) }
+    var number by remember { mutableStateOf("") }
+    var isSubmit by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.uth_logo),
+            contentDescription = null
+        )
+        Text(
+            "SmartTasks",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Blue
+        )
+        Spacer(modifier = Modifier.height(40.dp))
+        Text(
+            "Verify Code",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(
+            "Enter the code we just sent you on your registered Email",
+            fontSize = 15.sp,
+            color = Color.Black,
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            value = number,
+            onValueChange = {
+                number = it
+            },
+            label = {
+                Text("OTP")
+            },
+            isError = isOtpError
+        )
+        if (isOtpError && isSubmit) {
+            Text(
+                text = "OTP không đúng",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(horizontal = 20.dp)
+            )
         }
-    }
-    else {
-        var number by remember { mutableStateOf("") }
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.uth_logo),
-                contentDescription = null
-            )
-            Text(
-                "SmartTasks",
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Blue
-            )
-            Spacer(modifier = Modifier.height(40.dp))
-            Text(
-                "Verify Code",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(
-                "Enter the the code \n" +
-                        "we just sent you on your registered Email",
-                fontSize = 15.sp,
-                color = Color.Black,
-                textAlign = TextAlign.Center
 
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
-                value = number,
-                onValueChange = {number=it},
-                label = {
-                    Text("OTP")
+        Spacer(modifier = Modifier.height(20.dp))
+        Button(
+            onClick = {
+                isSubmit = true
+                isOtpError = number != "12345"
+                if (!isOtpError) {
+                    navController.navigate("navDataFlow3/$email/$number")
                 }
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-            Button(
-                onClick = { navController.navigate("navDataFlow3/$email/$number") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-                colors = androidx.compose.material3.ButtonDefaults.buttonColors(Color(0xFF2196F3))
-            ) {
-                Text("Next")
-            }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            colors = ButtonDefaults.buttonColors(Color(0xFF2196F3))
+        ) {
+            Text("Next")
         }
     }
 }
+
 
 @Composable
 fun DataFlowNavigation3(email:String?, otp:String, navController: NavHostController) {

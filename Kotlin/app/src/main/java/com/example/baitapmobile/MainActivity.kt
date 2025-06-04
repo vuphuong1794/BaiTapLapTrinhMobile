@@ -22,7 +22,6 @@ import com.example.baitapmobile.tuan3.page1
 import com.example.baitapmobile.tuan3.page2
 import com.example.baitapmobile.tuan3.textField
 import com.example.baitapmobile.tuan4.detailPage
-import com.example.baitapmobile.tuan4.homework.baitap1.baitap4
 import com.example.baitapmobile.tuan4.homework.baitap1.qlyThuVien
 import com.example.baitapmobile.tuan4.homework.baitap2.DataFlowNavigation
 import com.example.baitapmobile.tuan4.homework.baitap2.DataFlowNavigation2
@@ -58,7 +57,7 @@ class MainActivity : ComponentActivity() {
         val navController = rememberNavController()
         NavHost(
             navController = navController,
-            startDestination = "bai4"
+            startDestination = "dataFlow"
         ) {
             composable("navigation") {
                 navigation(navController = navController)
@@ -157,10 +156,6 @@ class MainActivity : ComponentActivity() {
                     val email = backStackEntry.arguments?.getString("email")
                     val pass = backStackEntry.arguments?.getString("pass")
                     DataFlowNavigation(email, pass, navController)
-            }
-
-            composable("bai4") {
-                baitap4(navController)
             }
         }
     }

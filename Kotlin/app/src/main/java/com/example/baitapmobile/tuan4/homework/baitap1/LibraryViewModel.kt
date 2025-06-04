@@ -1,5 +1,3 @@
-
-// ViewModel cập nhật
 package com.example.baitapmobile.tuan4.homework.baitap1
 
 import androidx.compose.runtime.mutableStateOf
@@ -15,9 +13,9 @@ class LibraryViewModel : ViewModel() {
     )
 
     private val library = Library(initialBooks)
-    private val _currentStudent = mutableStateOf<Student?>(null)
+    private val _currentStudent = mutableStateOf<Student?>(null) //sinh viên đang đăng nhập
     val showAvailable = mutableStateOf(false)
-    private val _borrowStateTrigger = mutableStateOf(0)
+    private val _borrowStateTrigger = mutableStateOf(0) //Trigger khi mượn / trả sách
     private val _bookListTrigger = mutableStateOf(0) // Trigger cho danh sách sách
 
     val currentStudent: State<Student?> get() = _currentStudent
@@ -30,16 +28,19 @@ class LibraryViewModel : ViewModel() {
         }
     }
 
+    //đảo trạng thái ShowAvailable
     fun toggleShowAvailable() {
         showAvailable.value = !showAvailable.value
     }
 
     fun isShowingAvailable(): Boolean = showAvailable.value
 
+    //danh sách hiển thị
     fun getDisplayBooks(): List<Book> {
         val student = _currentStudent.value ?: return emptyList()
-        _borrowStateTrigger.value // Đọc để trigger re-compose
-        _bookListTrigger.value // Đọc để trigger re-compose khi có thay đổi danh sách
+        // Đọc để trigger re-compose khi có thay đổi danh sách
+        _borrowStateTrigger.value
+        _bookListTrigger.value
         return if (showAvailable.value) {
             library.getAvailableBooks()
         } else {
