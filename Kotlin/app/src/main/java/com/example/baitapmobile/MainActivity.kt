@@ -32,6 +32,8 @@ import com.example.baitapmobile.tuan4.homework.thuchanh2.startScreen
 import com.example.baitapmobile.ui.theme.BaiTapMobileTheme
 import com.example.baitapmobile.tuan4.lazyColumnPage
 import com.example.baitapmobile.tuan4.navigation
+import com.example.baitapmobile.tuan5.LoginForm
+import com.example.baitapmobile.tuan5.ProductDetailScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +59,7 @@ class MainActivity : ComponentActivity() {
         val navController = rememberNavController()
         NavHost(
             navController = navController,
-            startDestination = "dataFlow"
+            startDestination = "loginForm"
         ) {
             composable("navigation") {
                 navigation(navController = navController)
@@ -156,6 +158,15 @@ class MainActivity : ComponentActivity() {
                     val email = backStackEntry.arguments?.getString("email")
                     val pass = backStackEntry.arguments?.getString("pass")
                     DataFlowNavigation(email, pass, navController)
+            }
+
+            //tuan 5
+            composable("productScreenPage") {
+                ProductDetailScreen(navController)
+            }
+
+            composable("loginForm") {
+                LoginForm(navController)
             }
         }
     }
