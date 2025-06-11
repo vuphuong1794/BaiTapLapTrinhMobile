@@ -1,6 +1,6 @@
-package com.example.baitapmobile.tuan5.retrofit
+package com.example.baitapmobile.tuan5.bai1.retrofit
 
-import com.example.baitapmobile.tuan5.responseModel.productResponse
+import com.example.baitapmobile.tuan5.bai1.responseModel.productResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET

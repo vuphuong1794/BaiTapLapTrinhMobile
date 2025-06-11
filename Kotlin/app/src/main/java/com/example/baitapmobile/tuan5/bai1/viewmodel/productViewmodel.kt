@@ -1,4 +1,4 @@
-package com.example.baitapmobile.tuan5.viewmodel
+package com.example.baitapmobile.tuan5.bai1.viewmodel
 
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -6,10 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.baitapmobile.tuan5.responseModel.productResponse
-import com.example.baitapmobile.tuan5.retrofit.RetrofitInstance
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import com.example.baitapmobile.tuan5.bai1.responseModel.productResponse
+import com.example.baitapmobile.tuan5.bai1.retrofit.RetrofitInstance
 import kotlinx.coroutines.launch
 
 class productViewModel(): ViewModel() {

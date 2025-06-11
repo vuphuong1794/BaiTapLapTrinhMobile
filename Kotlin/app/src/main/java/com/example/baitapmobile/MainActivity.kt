@@ -1,14 +1,22 @@
 package com.example.baitapmobile
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -32,10 +40,24 @@ import com.example.baitapmobile.tuan4.homework.thuchanh2.startScreen
 import com.example.baitapmobile.ui.theme.BaiTapMobileTheme
 import com.example.baitapmobile.tuan4.lazyColumnPage
 import com.example.baitapmobile.tuan4.navigation
-import com.example.baitapmobile.tuan5.LoginForm
-import com.example.baitapmobile.tuan5.ProductDetailScreen
+import com.example.baitapmobile.tuan5.bai2.LoginForm
+import com.example.baitapmobile.tuan5.bai1.ProductDetailScreen
+import com.example.baitapmobile.tuan5.bai2.GoogleAuthUiClient
+import com.example.baitapmobile.tuan5.bai2.SignInViewModel
+import com.google.android.gms.auth.api.identity.Identity
+import kotlinx.coroutines.launch
+import androidx.compose.runtime.getValue
+import com.example.baitapmobile.tuan5.bai2.ProfileScreen
+
 
 class MainActivity : ComponentActivity() {
+    private val googleAuthUiClient by lazy {
+        GoogleAuthUiClient(
+            context = applicationContext,
+            oneTapClient = Identity.getSignInClient(applicationContext)
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -166,7 +188,70 @@ class MainActivity : ComponentActivity() {
             }
 
             composable("loginForm") {
-                LoginForm(navController)
+                val viewModel = viewModel<SignInViewModel>()
+                val state by viewModel.state.collectAsStateWithLifecycle()
+
+                val launcher = rememberLauncherForActivityResult(
+                    contract = ActivityResultContracts.StartIntentSenderForResult(),
+                    onResult = {result ->
+                        if(result.resultCode == RESULT_OK) {
+                            lifecycleScope.launch {
+                                val signInResult = googleAuthUiClient.SignInWithIntent(
+                                    intent = result.data ?: return@launch
+                                )
+                                viewModel.onSigninResult(signInResult)
+                            }
+                        }
+                    }
+                )
+
+                LaunchedEffect(key1 = state.isSignSuccessful) {
+                    if(state.isSignSuccessful) {
+                        Toast.makeText(
+                            applicationContext,
+                            "Sign in successful",
+                            Toast.LENGTH_LONG
+                        ).show()
+
+                        navController.navigate("user_profile")
+                    }
+                }
+
+                LoginForm(
+                    navController,
+                    state = state,
+                    onSignInClick = {
+                        lifecycleScope.launch {
+                            val signInIntentSender = googleAuthUiClient.signIn()
+                            launcher.launch(
+                                IntentSenderRequest.Builder(
+                                    signInIntentSender ?: return@launch
+                                ).build()
+                            )
+                        }
+                    }
+                )
+            }
+
+            composable("user_profile") {
+                ProfileScreen(
+                    navController,
+                    userData = googleAuthUiClient.getSignInUser(),
+                    onSignOut = {
+                        lifecycleScope.launch {
+                            googleAuthUiClient.SignOut()
+                            Toast.makeText(
+                                applicationContext,
+                                "Signed out",
+                                Toast.LENGTH_LONG
+                            ).show()
+
+                            navController.navigate("loginForm") {
+                                popUpTo("loginForm") { inclusive = true }
+                            }
+                        }
+                    }
+                )
             }
         }
     }
