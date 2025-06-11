@@ -67,7 +67,7 @@ fun ProfileScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Back",
+                        contentDescription = "Back icon",
                         tint = Color.White
                     )
                 }
