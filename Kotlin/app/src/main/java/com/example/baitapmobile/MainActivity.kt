@@ -1,5 +1,7 @@
 package com.example.baitapmobile
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -8,9 +10,11 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -48,7 +52,10 @@ import com.google.android.gms.auth.api.identity.Identity
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.getValue
 import com.example.baitapmobile.tuan5.bai2.ProfileScreen
-
+import com.example.baitapmobile.tuan6.nangcao.PermissionRequestScreen
+import com.example.baitapmobile.tuan6.taskList.AddTask
+import com.example.baitapmobile.tuan6.taskList.SmartTasks
+import com.example.baitapmobile.tuan6.taskList.taskDetail
 
 class MainActivity : ComponentActivity() {
     private val googleAuthUiClient by lazy {
@@ -58,6 +65,7 @@ class MainActivity : ComponentActivity() {
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -81,7 +89,7 @@ class MainActivity : ComponentActivity() {
         val navController = rememberNavController()
         NavHost(
             navController = navController,
-            startDestination = "loginForm"
+            startDestination = "permissionRequest"
         ) {
             composable("navigation") {
                 navigation(navController = navController)
@@ -150,7 +158,7 @@ class MainActivity : ComponentActivity() {
                 val email = backStackEntry.arguments?.getString("email")
                 val otp = backStackEntry.arguments?.getString("otp")
                 if (email!=null && otp != null) {
-                    DataFlowNavigation3(email,otp, navController)
+                    DataFlowNavigation3(email, otp, navController)
                 }
             }
 
@@ -213,7 +221,7 @@ class MainActivity : ComponentActivity() {
                             Toast.LENGTH_LONG
                         ).show()
 
-                        navController.navigate("user_profile")
+                        navController.navigate("smartTasks")
                     }
                 }
 
@@ -252,6 +260,31 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 )
+            }
+
+            //tuan 6
+            composable("smartTasks") {
+                SmartTasks(navController)
+            }
+
+            composable("task_detail/{taskId}"){
+                backStackEntry ->
+                val taskId = backStackEntry.arguments?.getString("taskId")?.toInt()
+                if (taskId != null) {
+                    taskDetail(taskId = taskId, navController)
+                } else {
+                    Text(
+                        text = "id ko hop le"
+                    )
+                }
+            }
+
+            composable("addTask") {
+                AddTask(navController)
+            }
+
+            composable("permissionRequest") {
+                PermissionRequestScreen(navController)
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.example.baitapmobile.tuan5.bai1.responseModel
+package com.example.baitapmobile.responseModel
 
 data class productResponse (
     val name: String,

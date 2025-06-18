@@ -60,7 +60,7 @@ fun ProfileScreen(
             },
             navigationIcon = {
                 IconButton(
-                    onClick = { },
+                    onClick = { navController.navigate("smartTasks")},
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .background(Color(0xFF2196F3), shape = CircleShape)
